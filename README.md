@@ -1,2 +1,2 @@
 ### Hexlet tests and linter status:
-[![Actions Status](https://github.com/ierofeev-qa/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ierofeev-qa/ai-for-developers-project-386/actions)
+[![Actions Status](https://github.com/ierofeev-qa/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)лл](https://github.com/ierofeev-qa/ai-for-developers-project-386/actions)/

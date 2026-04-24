@@ -1,0 +1,27 @@
+{
+  "event-types": [
+    {
+      "id": "1",
+      "name": "Консультация",
+      "description": "Индивидуальная консультация по любым вопросам",
+      "durationMinutes": 30
+    },
+    {
+      "id": "2",
+      "name": "Встреча",
+      "description": "Деловая встреча",
+      "durationMinutes": 60
+    },
+    {
+      "id": "3",
+      "name": "Тренинг",
+      "description": "Групповой тренинг до 10 человек",
+      "durationMinutes": 120
+    }
+  ],
+  "bookings": [],
+  "meetings": {
+    "total": 0,
+    "meetings": []
+  }
+}
