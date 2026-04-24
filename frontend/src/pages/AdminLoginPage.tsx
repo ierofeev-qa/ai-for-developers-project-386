@@ -8,12 +8,13 @@ interface AdminLoginPageProps {
 
 export const AdminLoginPage = ({ onLogin, onBack }: AdminLoginPageProps) => {
   return (
-    <Container size="sm" py="xl">
+    <Container size="sm" py="xl" data-testid="admin-login-page">
       <Button 
         variant="light" 
         onClick={onBack} 
         leftSection={<IconArrowLeft size={18} />}
         mb="xl"
+        data-testid="back-button"
       >
         Назад
       </Button>
@@ -31,13 +32,14 @@ export const AdminLoginPage = ({ onLogin, onBack }: AdminLoginPageProps) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              data-testid="admin-icon"
             >
               <IconShield size={40} color="white" />
             </div>
 
             <div>
-              <Title order={2} mb="xs">Вход в админ-панель</Title>
-              <Text c="dimmed" size="sm">
+              <Title order={2} mb="xs" data-testid="admin-login-title">Вход в админ-панель</Title>
+              <Text c="dimmed" size="sm" data-testid="admin-login-description">
                 В проекте нет системы авторизации. Владелец календаря — 
                 один заранее заданный профиль.
               </Text>
@@ -47,6 +49,7 @@ export const AdminLoginPage = ({ onLogin, onBack }: AdminLoginPageProps) => {
               size="lg" 
               onClick={onLogin}
               leftSection={<IconShield size={20} />}
+              data-testid="login-button"
             >
               Войти как владелец
             </Button>
