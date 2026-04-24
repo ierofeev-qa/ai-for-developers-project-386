@@ -68,32 +68,32 @@ export const TimeSlotSelector = ({ eventType, onSelectSlot, onBack }: TimeSlotSe
   const availableSlots = currentDateSlots.filter(slot => slot.isAvailable);
 
   return (
-    <Card withBorder shadow="md" padding="xl">
+    <Card withBorder shadow="md" padding="xl" data-testid="time-slot-selector">
       <Stack gap="lg">
         <Group justify="space-between">
-          <Button variant="light" onClick={onBack} leftSection={<IconArrowLeft size={18} />}>
+          <Button variant="light" onClick={onBack} leftSection={<IconArrowLeft size={18} />} data-testid="back-button">
             Назад
           </Button>
         </Group>
 
         <div>
-          <Text fw={700} size="xl" mb="xs">
+          <Text fw={700} size="xl" mb="xs" data-testid="event-type-title">
             {eventType.name}
           </Text>
           <Group gap="xs">
-            <Badge color="blue" leftSection={<IconClock size={14} />}>
+            <Badge color="blue" leftSection={<IconClock size={14} />} data-testid="event-duration">
               {formatDuration(eventType.durationMinutes)}
             </Badge>
           </Group>
           {eventType.description && (
-            <Text c="dimmed" size="sm" mt="xs">
+            <Text c="dimmed" size="sm" mt="xs" data-testid="event-description">
               {eventType.description}
             </Text>
           )}
         </div>
 
         {error && (
-          <Alert color="red" icon={<IconAlertCircle size={18} />}>
+          <Alert color="red" icon={<IconAlertCircle size={18} />} data-testid="error-alert">
             Ошибка загрузки доступных слотов. Попробуйте позже.
           </Alert>
         )}
@@ -113,6 +113,7 @@ export const TimeSlotSelector = ({ eventType, onSelectSlot, onBack }: TimeSlotSe
                 firstDayOfWeek={1}
                 locale="ru"
                 size="md"
+                data-testid="date-picker"
               />
               <Text size="xs" c="dimmed" mt="xs">
                 Доступно бронирование на ближайшие 14 дней
@@ -122,29 +123,30 @@ export const TimeSlotSelector = ({ eventType, onSelectSlot, onBack }: TimeSlotSe
 
           <Grid.Col span={{ base: 12, md: 7 }}>
             <Box>
-              <Text fw={600} mb="sm">
+              <Text fw={600} mb="sm" data-testid="available-slots-title">
                 Доступное время на {selectedDate ? dayjs(selectedDate).format('D MMMM') : ''}
               </Text>
               
               {isLoading ? (
-                <Center py="xl">
+                <Center py="xl" data-testid="slots-loader">
                   <Loader />
                 </Center>
               ) : availableSlots.length > 0 ? (
-                <Group gap="sm">
+                <Group gap="sm" data-testid="time-slots-container">
                   {availableSlots.map((slot, index) => (
                     <Button
                       key={index}
                       variant="light"
                       onClick={() => onSelectSlot(slot)}
                       size="sm"
+                      data-testid={`time-slot-${formatTime(slot.startTime)}`}
                     >
                       {formatTime(slot.startTime)}
                     </Button>
                   ))}
                 </Group>
               ) : (
-                <Alert color="yellow" icon={<IconAlertCircle size={18} />}>
+                <Alert color="yellow" icon={<IconAlertCircle size={18} />} data-testid="no-slots-alert">
                   Нет доступных слотов на выбранную дату
                 </Alert>
               )}

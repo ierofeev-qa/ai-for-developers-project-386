@@ -31,10 +31,10 @@ export const EventTypesListPage = ({ onBookEvent, onGoToAdmin }: EventTypesListP
   }
 
   return (
-    <Container size="lg" py="xl">
+    <Container size="lg" py="xl" data-testid="event-types-list-page">
       <Group justify="space-between" mb="xl">
         <div>
-          <Title order={1} mb="xs">
+          <Title order={1} mb="xs" data-testid="page-title">
             <IconCalendar size={40} style={{ verticalAlign: 'middle', marginRight: 10 }} />
             Запись на встречу
           </Title>
@@ -47,13 +47,14 @@ export const EventTypesListPage = ({ onBookEvent, onGoToAdmin }: EventTypesListP
           color="gray" 
           onClick={onGoToAdmin}
           leftSection={<IconShield size={18} />}
+          data-testid="admin-panel-button"
         >
           Админ-панель
         </Button>
       </Group>
 
       {eventTypes && eventTypes.length > 0 ? (
-        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg" data-testid="event-types-grid">
           {eventTypes.map((eventType) => (
             <EventTypeCard 
               key={eventType.id} 
@@ -64,7 +65,7 @@ export const EventTypesListPage = ({ onBookEvent, onGoToAdmin }: EventTypesListP
         </SimpleGrid>
       ) : (
         <Center py="xl">
-          <Text size="lg" c="dimmed">
+          <Text size="lg" c="dimmed" data-testid="no-events-message">
             Нет доступных типов встреч
           </Text>
         </Center>

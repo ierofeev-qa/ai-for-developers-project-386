@@ -84,13 +84,15 @@ export const EventTypeModal = ({ opened, onClose, eventType }: EventTypeModalPro
       onClose={onClose}
       title={isEditing ? 'Редактировать тип события' : 'Создать тип события'}
       size="md"
+      data-testid="event-type-modal"
     >
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form onSubmit={form.onSubmit(handleSubmit)} data-testid="event-type-form">
         <Stack gap="md">
           <TextInput
             label="Название"
             placeholder="Например: Консультация"
             required
+            data-testid="event-type-name-input"
             {...form.getInputProps('name')}
           />
 
@@ -98,6 +100,7 @@ export const EventTypeModal = ({ opened, onClose, eventType }: EventTypeModalPro
             label="Описание"
             placeholder="Опишите, что включает в себя этот тип встречи..."
             rows={3}
+            data-testid="event-type-description-input"
             {...form.getInputProps('description')}
           />
 
@@ -107,20 +110,21 @@ export const EventTypeModal = ({ opened, onClose, eventType }: EventTypeModalPro
             required
             min={1}
             max={480}
+            data-testid="event-type-duration-input"
             {...form.getInputProps('durationMinutes')}
           />
 
           {error && (
-            <Alert color="red" icon={<IconAlertCircle size={18} />}>
+            <Alert color="red" icon={<IconAlertCircle size={18} />} data-testid="form-error">
               Ошибка сохранения. Попробуйте позже.
             </Alert>
           )}
 
           <Group justify="flex-end" mt="md">
-            <Button variant="light" onClick={onClose}>
+            <Button variant="light" onClick={onClose} data-testid="cancel-button">
               Отмена
             </Button>
-            <Button type="submit" loading={isPending}>
+            <Button type="submit" loading={isPending} data-testid="submit-button">
               {isEditing ? 'Сохранить' : 'Создать'}
             </Button>
           </Group>

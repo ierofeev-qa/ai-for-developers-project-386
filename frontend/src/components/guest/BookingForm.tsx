@@ -76,30 +76,30 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
     (createBooking.error as any)?.response?.data?.code === 'SLOT_NOT_AVAILABLE';
 
   return (
-    <Card withBorder shadow="md" padding="xl">
+    <Card withBorder shadow="md" padding="xl" data-testid="booking-form">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="lg">
           <Group justify="space-between">
-            <Button variant="light" onClick={onBack} leftSection={<IconArrowLeft size={18} />}>
+            <Button variant="light" onClick={onBack} leftSection={<IconArrowLeft size={18} />} data-testid="back-button">
               Назад
             </Button>
           </Group>
 
           <div>
-            <Title order={3} mb="xs">Подтверждение записи</Title>
+            <Title order={3} mb="xs" data-testid="form-title">Подтверждение записи</Title>
             <Text c="dimmed" size="sm">
               Введите ваши данные для завершения бронирования
             </Text>
           </div>
 
-          <Card withBorder bg="gray.0">
+          <Card withBorder bg="gray.0" data-testid="booking-summary">
             <Stack gap="xs">
-              <Text fw={700}>{eventType.name}</Text>
+              <Text fw={700} data-testid="summary-event-name">{eventType.name}</Text>
               <Group gap="xs">
-                <Badge color="blue" leftSection={<IconCalendar size={14} />}>
+                <Badge color="blue" leftSection={<IconCalendar size={14} />} data-testid="summary-date">
                   {formatDateTime(selectedSlot.startTime)}
                 </Badge>
-                <Badge color="teal" leftSection={<IconClock size={14} />}>
+                <Badge color="teal" leftSection={<IconClock size={14} />} data-testid="summary-duration">
                   {formatDuration(eventType.durationMinutes)}
                 </Badge>
               </Group>
@@ -107,19 +107,19 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
           </Card>
 
           {isTimeConflict && (
-            <Alert color="red" icon={<IconAlertCircle size={18} />}>
+            <Alert color="red" icon={<IconAlertCircle size={18} />} data-testid="time-conflict-error">
               Выбранное время уже занято. Пожалуйста, выберите другой слот.
             </Alert>
           )}
 
           {isSlotNotAvailable && (
-            <Alert color="orange" icon={<IconAlertCircle size={18} />}>
+            <Alert color="orange" icon={<IconAlertCircle size={18} />} data-testid="slot-unavailable-error">
               Этот слот недоступен или вне окна бронирования. Пожалуйста, выберите другой.
             </Alert>
           )}
 
           {createBooking.error && !isTimeConflict && !isSlotNotAvailable && (
-            <Alert color="red" icon={<IconAlertCircle size={18} />}>
+            <Alert color="red" icon={<IconAlertCircle size={18} />} data-testid="general-error">
               Произошла ошибка при создании бронирования. Попробуйте позже.
             </Alert>
           )}
@@ -129,6 +129,7 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
             placeholder="Иван Иванов"
             required
             leftSection={<IconUser size={18} />}
+            data-testid="name-input"
             {...form.getInputProps('name')}
           />
 
@@ -137,6 +138,7 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
             placeholder="ivan@example.com"
             required
             leftSection={<IconMail size={18} />}
+            data-testid="email-input"
             {...form.getInputProps('email')}
           />
 
@@ -144,6 +146,7 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
             label="Телефон"
             placeholder="+7 (999) 123-45-67"
             leftSection={<IconPhone size={18} />}
+            data-testid="phone-input"
             {...form.getInputProps('phone')}
           />
 
@@ -152,6 +155,7 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
             placeholder="Любая дополнительная информация..."
             rows={3}
             leftSection={<IconNotes size={18} />}
+            data-testid="notes-input"
             {...form.getInputProps('notes')}
           />
 
@@ -160,6 +164,7 @@ export const BookingForm = ({ eventType, selectedSlot, onBack, onSuccess }: Book
             size="lg" 
             loading={createBooking.isPending}
             fullWidth
+            data-testid="submit-booking-button"
           >
             Подтвердить запись
           </Button>

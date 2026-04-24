@@ -17,20 +17,20 @@ export const EventTypeCard = ({ eventType, onBook }: EventTypeCardProps) => {
   };
 
   return (
-    <Card withBorder h="100%">
+    <Card withBorder h="100%" data-testid={`event-type-card-${eventType.id}`}>
       <Stack gap="md" h="100%" justify="space-between">
         <div>
           <Group justify="space-between" mb="xs">
-            <Text fw={700} size="lg">
+            <Text fw={700} size="lg" data-testid="event-type-name">
               {eventType.name}
             </Text>
-            <Badge color="blue" variant="light" leftSection={<IconClock size={14} />}>
+            <Badge color="blue" variant="light" leftSection={<IconClock size={14} />} data-testid="event-type-duration">
               {formatDuration(eventType.durationMinutes)}
             </Badge>
           </Group>
           
           {eventType.description && (
-            <Text c="dimmed" size="sm" lineClamp={3}>
+            <Text c="dimmed" size="sm" lineClamp={3} data-testid="event-type-description">
               {eventType.description}
             </Text>
           )}
@@ -41,6 +41,7 @@ export const EventTypeCard = ({ eventType, onBook }: EventTypeCardProps) => {
           fullWidth 
           rightSection={<IconArrowRight size={18} />}
           size="md"
+          data-testid="book-button"
         >
           Записаться
         </Button>

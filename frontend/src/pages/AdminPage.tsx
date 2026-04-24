@@ -17,31 +17,32 @@ export const AdminPage = ({ onLogout }: AdminPageProps) => {
   const handleGoToEventTypes = () => setActiveTab('event-types');
 
   return (
-    <Container size="xl" py="xl">
+    <Container size="xl" py="xl" data-testid="admin-page">
       <Group justify="space-between" mb="xl">
         <div>
-          <Title order={1} mb="xs">
+          <Title order={1} mb="xs" data-testid="admin-page-title">
             <IconShield size={32} style={{ verticalAlign: 'middle', marginRight: 10 }} />
             Админ-панель
           </Title>
-          <Text c="dimmed">Управление встречами и типами событий</Text>
+          <Text c="dimmed" data-testid="admin-page-description">Управление встречами и типами событий</Text>
         </div>
         <Button 
           variant="light" 
           color="gray" 
           onClick={onLogout}
           leftSection={<IconLogout size={18} />}
+          data-testid="logout-button"
         >
           Выход
         </Button>
       </Group>
 
-      <Tabs value={activeTab} onChange={(value) => setActiveTab(value as AdminTab)}>
+      <Tabs value={activeTab} onChange={(value) => setActiveTab(value as AdminTab)} data-testid="admin-tabs">
         <Tabs.List mb="lg">
-          <Tabs.Tab value="meetings" leftSection={<IconCalendarEvent size={18} />}>
+          <Tabs.Tab value="meetings" leftSection={<IconCalendarEvent size={18} />} data-testid="meetings-tab">
             Предстоящие встречи
           </Tabs.Tab>
-          <Tabs.Tab value="event-types" leftSection={<IconList size={18} />}>
+          <Tabs.Tab value="event-types" leftSection={<IconList size={18} />} data-testid="event-types-tab">
             Типы событий
           </Tabs.Tab>
         </Tabs.List>

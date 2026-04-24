@@ -84,17 +84,17 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
   }
 
   const rows = eventTypes?.map((eventType) => (
-    <Table.Tr key={eventType.id}>
+    <Table.Tr key={eventType.id} data-testid={`event-type-row-${eventType.id}`}>
       <Table.Td>
-        <Text fw={500}>{eventType.name}</Text>
+        <Text fw={500} data-testid={`event-type-name-${eventType.id}`}>{eventType.name}</Text>
       </Table.Td>
       <Table.Td>
-        <Text c="dimmed" size="sm" lineClamp={2}>
+        <Text c="dimmed" size="sm" lineClamp={2} data-testid={`event-type-description-${eventType.id}`}>
           {eventType.description || '-'}
         </Text>
       </Table.Td>
       <Table.Td>
-        <Badge leftSection={<IconClock size={14} />}>
+        <Badge leftSection={<IconClock size={14} />} data-testid={`event-type-duration-${eventType.id}`}>
           {formatDuration(eventType.durationMinutes)}
         </Badge>
       </Table.Td>
@@ -104,6 +104,7 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
             variant="light" 
             color="blue" 
             onClick={() => handleEdit(eventType)}
+            data-testid={`edit-event-type-${eventType.id}`}
           >
             <IconEdit size={18} />
           </ActionIcon>
@@ -112,6 +113,7 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
             color="red" 
             onClick={() => handleDeleteClick(eventType.id)}
             loading={deleteEventType.isPending && deletingId === eventType.id}
+            data-testid={`delete-event-type-${eventType.id}`}
           >
             <IconTrash size={18} />
           </ActionIcon>
@@ -122,21 +124,22 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
 
   return (
     <>
-      <Card withBorder>
+      <Card withBorder data-testid="event-types-manager">
         <Group justify="space-between" mb="lg">
-          <Button variant="light" onClick={onBack}>
+          <Button variant="light" onClick={onBack} data-testid="back-button">
             Назад
           </Button>
           <Button 
             onClick={handleCreate} 
             leftSection={<IconPlus size={18} />}
+            data-testid="create-event-type-button"
           >
             Создать тип события
           </Button>
         </Group>
 
         {eventTypes && eventTypes.length > 0 ? (
-          <Table striped highlightOnHover>
+          <Table striped highlightOnHover data-testid="event-types-table">
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Название</Table.Th>
@@ -149,7 +152,7 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
           </Table>
         ) : (
           <Center py="xl">
-            <Text c="dimmed">Нет созданных типов событий</Text>
+            <Text c="dimmed" data-testid="no-event-types-message">Нет созданных типов событий</Text>
           </Center>
         )}
       </Card>
@@ -165,20 +168,22 @@ export const EventTypesManager = ({ onBack }: EventTypesManagerProps) => {
         onClose={() => setDeleteConfirmOpen(false)}
         title="Подтверждение удаления"
         centered
+        data-testid="delete-confirm-modal"
       >
         <Stack>
-          <Text>
+          <Text data-testid="delete-confirm-message">
             Вы уверены, что хотите удалить этот тип события? 
             Это действие нельзя отменить.
           </Text>
           <Group justify="flex-end">
-            <Button variant="light" onClick={() => setDeleteConfirmOpen(false)}>
+            <Button variant="light" onClick={() => setDeleteConfirmOpen(false)} data-testid="cancel-delete-button">
               Отмена
             </Button>
             <Button 
               color="red" 
               onClick={handleConfirmDelete}
               loading={deleteEventType.isPending}
+              data-testid="confirm-delete-button"
             >
               Удалить
             </Button>

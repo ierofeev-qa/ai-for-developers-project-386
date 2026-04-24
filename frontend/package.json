@@ -9,7 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "mock": "prism mock ./src/mocks/api.mock.json --port 3001",
-    "dev:mock": "concurrently \"npm run mock\" \"npm run dev\""
+    "dev:mock": "concurrently \"npm run mock\" \"npm run dev\"",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@mantine/core": "^9.1.0",
@@ -28,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.59.1",
     "@tanstack/react-query-devtools": "^5.100.1",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
