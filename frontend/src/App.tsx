@@ -34,11 +34,6 @@ function App() {
     setCurrentPage('booking');
   };
 
-  const goToBookingById = (eventTypeId: string) => {
-    setSelectedEventTypeId(eventTypeId);
-    setCurrentPage('booking');
-  };
-
   const goToConfirmation = (id: string) => {
     setBookingId(id);
     setCurrentPage('confirmation');

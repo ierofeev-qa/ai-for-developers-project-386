@@ -1,8 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import eventTypesRouter from './routes/eventTypes.js';
 import bookingsRouter from './routes/bookings.js';
 import adminRouter from './routes/admin.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,22 +16,23 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/event-types', eventTypesRouter);
-app.use('/bookings', bookingsRouter);
-app.use('/admin', adminRouter);
+// API Routes (must be before static files)
+app.use('/api/event-types', eventTypesRouter);
+app.use('/api/bookings', bookingsRouter);
+app.use('/api/admin', adminRouter);
 
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    code: 'NOT_FOUND',
-    message: `Route ${req.method} ${req.path} not found`,
-  });
+// Serve static files from frontend build
+const staticPath = path.join(process.cwd(), 'frontend/dist');
+app.use(express.static(staticPath));
+
+// SPA fallback: serve index.html for all non-API routes
+app.get('{*path}', (req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 // Error handler
@@ -39,19 +45,20 @@ app.use((err: Error, req: express.Request, res: express.Response, _next: express
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Calendar Booking API server running on port ${PORT}`);
+  console.log(`🚀 Calendar Booking server running on port ${PORT}`);
   console.log(`📅 Health check: http://localhost:${PORT}/health`);
   console.log(`📋 API endpoints:`);
-  console.log(`  - GET  /event-types`);
-  console.log(`  - GET  /event-types/:id`);
-  console.log(`  - GET  /event-types/:id/available-slots`);
-  console.log(`  - POST /bookings`);
-  console.log(`  - GET  /bookings/:id`);
-  console.log(`  - POST /admin/event-types`);
-  console.log(`  - PATCH /admin/event-types/:id`);
-  console.log(`  - DELETE /admin/event-types/:id`);
-  console.log(`  - GET  /admin/bookings`);
-  console.log(`  - GET  /admin/meetings/upcoming`);
-  console.log(`  - POST /admin/bookings/:id/cancel`);
-  console.log(`  - POST /admin/bookings/:id/reschedule`);
+  console.log(`  - GET  /api/event-types`);
+  console.log(`  - GET  /api/event-types/:id`);
+  console.log(`  - GET  /api/event-types/:id/available-slots`);
+  console.log(`  - POST /api/bookings`);
+  console.log(`  - GET  /api/bookings/:id`);
+  console.log(`  - POST /api/admin/event-types`);
+  console.log(`  - PATCH /api/admin/event-types/:id`);
+  console.log(`  - DELETE /api/admin/event-types/:id`);
+  console.log(`  - GET  /api/admin/bookings`);
+  console.log(`  - GET  /api/admin/meetings/upcoming`);
+  console.log(`  - POST /api/admin/bookings/:id/cancel`);
+  console.log(`  - POST /api/admin/bookings/:id/reschedule`);
+  console.log(`🌐 Frontend: http://localhost:${PORT}`);
 });

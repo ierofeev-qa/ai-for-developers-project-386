@@ -32,6 +32,17 @@ export const TimeSlotSelector = ({ eventType, onSelectSlot, onBack }: TimeSlotSe
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   
   const startDate = selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : undefined;
+  
+  // Handle DatePicker change - convert string to Date
+  const handleDateChange = (value: Date | string | null) => {
+    if (value === null) {
+      setSelectedDate(null);
+    } else if (typeof value === 'string') {
+      setSelectedDate(new Date(value));
+    } else {
+      setSelectedDate(value);
+    }
+  };
   const { data, isLoading, error } = useAvailableSlots(eventType.id, startDate);
 
   const formatDuration = (minutes: number) => {
@@ -107,7 +118,7 @@ export const TimeSlotSelector = ({ eventType, onSelectSlot, onBack }: TimeSlotSe
               </Text>
               <DatePicker
                 value={selectedDate}
-                onChange={setSelectedDate}
+                onChange={handleDateChange}
                 minDate={getMinDate()}
                 maxDate={getMaxDate()}
                 firstDayOfWeek={1}
