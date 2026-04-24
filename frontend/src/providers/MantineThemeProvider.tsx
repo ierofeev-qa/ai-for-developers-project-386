@@ -1,6 +1,6 @@
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 // Импорт стилей Mantine
 import '@mantine/core/styles.css';

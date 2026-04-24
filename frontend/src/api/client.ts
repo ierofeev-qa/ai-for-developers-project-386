@@ -10,16 +10,12 @@ import type {
   ErrorResponse 
 } from '../types';
 
-// Базовый URL API (можно вынести в .env)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-
-// Для разработки с Vite proxy используем относительный путь
+// Базовый URL API
+// В production frontend и backend на одном домене, используем относительный путь
+// В development используем Vite proxy
 const getBaseUrl = () => {
-  // Если используется Vite dev server с proxy
-  if (import.meta.env.DEV) {
-    return '/api';
-  }
-  return API_BASE_URL;
+  // Всегда используем /api так как backend раздаёт статику и API на одном домене
+  return '/api';
 };
 
 // Создание экземпляра axios
