@@ -1,0 +1,675 @@
+{
+  "openAPI": "3.0.0",
+  "info": {
+    "title": "Calendar Booking API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/event-types": {
+      "get": {
+        "operationId": "listEventTypes",
+        "responses": {
+          "200": {
+            "description": "Список типов событий",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventType"
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": [
+                      {
+                        "id": "1",
+                        "name": "Консультация",
+                        "description": "Индивидуальная консультация по любым вопросам",
+                        "durationMinutes": 30
+                      },
+                      {
+                        "id": "2",
+                        "name": "Встреча",
+                        "description": "Деловая встреча",
+                        "durationMinutes": 60
+                      },
+                      {
+                        "id": "3",
+                        "name": "Тренинг",
+                        "description": "Групповой тренинг до 10 человек",
+                        "durationMinutes": 120
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-types/{id}": {
+      "get": {
+        "operationId": "getEventType",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Тип события",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventType"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "id": "1",
+                      "name": "Консультация",
+                      "description": "Индивидуальная консультация",
+                      "durationMinutes": 30
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event-types/{eventTypeId}/available-slots": {
+      "get": {
+        "operationId": "getAvailableSlots",
+        "parameters": [
+          {
+            "name": "eventTypeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 14
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Доступные слоты",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailableSlotsResponse"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "eventTypeId": "1",
+                      "windowStart": "2024-01-01T00:00:00Z",
+                      "windowEnd": "2024-01-15T00:00:00Z",
+                      "slots": [
+                        {
+                          "startTime": "2024-01-01T09:00:00Z",
+                          "endTime": "2024-01-01T09:30:00Z",
+                          "isAvailable": true
+                        },
+                        {
+                          "startTime": "2024-01-01T10:00:00Z",
+                          "endTime": "2024-01-01T10:30:00Z",
+                          "isAvailable": true
+                        },
+                        {
+                          "startTime": "2024-01-01T11:00:00Z",
+                          "endTime": "2024-01-01T11:30:00Z",
+                          "isAvailable": false
+                        },
+                        {
+                          "startTime": "2024-01-01T14:00:00Z",
+                          "endTime": "2024-01-01T14:30:00Z",
+                          "isAvailable": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings": {
+      "post": {
+        "operationId": "createBooking",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Бронирование создано",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "id": "booking-1",
+                      "eventTypeId": "1",
+                      "eventType": {
+                        "id": "1",
+                        "name": "Консультация",
+                        "description": "Индивидуальная консультация",
+                        "durationMinutes": 30
+                      },
+                      "startTime": "2024-01-01T09:00:00Z",
+                      "endTime": "2024-01-01T09:30:00Z",
+                      "guest": {
+                        "name": "Иван Иванов",
+                        "email": "ivan@example.com",
+                        "phone": "+79991234567"
+                      },
+                      "status": "confirmed",
+                      "createdAt": "2024-01-01T08:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bookings/{id}": {
+      "get": {
+        "operationId": "getBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Бронирование",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "id": "booking-1",
+                      "eventTypeId": "1",
+                      "eventType": {
+                        "id": "1",
+                        "name": "Консультация",
+                        "description": "Индивидуальная консультация",
+                        "durationMinutes": 30
+                      },
+                      "startTime": "2024-01-01T09:00:00Z",
+                      "endTime": "2024-01-01T09:30:00Z",
+                      "guest": {
+                        "name": "Иван Иванов",
+                        "email": "ivan@example.com",
+                        "phone": "+79991234567"
+                      },
+                      "status": "confirmed",
+                      "createdAt": "2024-01-01T08:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/event-types": {
+      "post": {
+        "operationId": "createEventType",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEventTypeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Тип события создан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/event-types/{id}": {
+      "patch": {
+        "operationId": "updateEventType",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEventTypeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Тип события обновлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventType"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteEventType",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Тип события удален"
+          }
+        }
+      }
+    },
+    "/admin/bookings": {
+      "get": {
+        "operationId": "listAllBookings",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список бронирований",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Booking"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/meetings/upcoming": {
+      "get": {
+        "operationId": "getUpcomingMeetings",
+        "responses": {
+          "200": {
+            "description": "Предстоящие встречи",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpcomingMeetingsResponse"
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "total": 2,
+                      "meetings": [
+                        {
+                          "id": "booking-1",
+                          "eventType": {
+                            "id": "1",
+                            "name": "Консультация",
+                            "description": "Индивидуальная консультация",
+                            "durationMinutes": 30
+                          },
+                          "startTime": "2024-01-01T09:00:00Z",
+                          "endTime": "2024-01-01T09:30:00Z",
+                          "guest": {
+                            "name": "Иван Иванов",
+                            "email": "ivan@example.com",
+                            "phone": "+79991234567"
+                          },
+                          "status": "confirmed"
+                        },
+                        {
+                          "id": "booking-2",
+                          "eventType": {
+                            "id": "2",
+                            "name": "Встреча",
+                            "description": "Деловая встреча",
+                            "durationMinutes": 60
+                          },
+                          "startTime": "2024-01-02T10:00:00Z",
+                          "endTime": "2024-01-02T11:00:00Z",
+                          "guest": {
+                            "name": "Петр Петров",
+                            "email": "petr@example.com"
+                          },
+                          "status": "confirmed"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/bookings/{id}/cancel": {
+      "post": {
+        "operationId": "cancelBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Бронирование отменено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EventType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "integer"
+          }
+        },
+        "required": ["id", "name", "durationMinutes"]
+      },
+      "CreateEventTypeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "integer"
+          }
+        },
+        "required": ["name", "durationMinutes"]
+      },
+      "UpdateEventTypeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "integer"
+          }
+        }
+      },
+      "GuestInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "email"]
+      },
+      "Booking": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventTypeId": {
+            "type": "string"
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "guest": {
+            "$ref": "#/components/schemas/GuestInfo"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["confirmed", "cancelled"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "eventTypeId", "eventType", "startTime", "endTime", "guest", "status", "createdAt"]
+      },
+      "CreateBookingRequest": {
+        "type": "object",
+        "properties": {
+          "eventTypeId": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "guest": {
+            "$ref": "#/components/schemas/GuestInfo"
+          }
+        },
+        "required": ["eventTypeId", "startTime", "guest"]
+      },
+      "TimeSlot": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isAvailable": {
+            "type": "boolean"
+          }
+        },
+        "required": ["startTime", "endTime", "isAvailable"]
+      },
+      "AvailableSlotsResponse": {
+        "type": "object",
+        "properties": {
+          "eventTypeId": {
+            "type": "string"
+          },
+          "windowStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "windowEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSlot"
+            }
+          }
+        },
+        "required": ["eventTypeId", "windowStart", "windowEnd", "slots"]
+      },
+      "UpcomingMeeting": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "guest": {
+            "$ref": "#/components/schemas/GuestInfo"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["confirmed", "cancelled"]
+          }
+        },
+        "required": ["id", "eventType", "startTime", "endTime", "guest", "status"]
+      },
+      "UpcomingMeetingsResponse": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "meetings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpcomingMeeting"
+            }
+          }
+        },
+        "required": ["total", "meetings"]
+      }
+    }
+  }
+}
